@@ -137,52 +137,14 @@ const Utils = (() => {
    * @param {string} filename
    */
   function downloadBlob(blob, filename) {
-    // Ensure filename is safe ASCII with extension
-    const safeName = filename.replace(/[^\w.\-]/g, '_');
-    
-    try {
-      // Method 1: Use navigator.msSaveBlob for IE/old Edge
-      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveOrOpenBlob(blob, safeName);
-        return;
-      }
-
-      // Method 2: Standard anchor download
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = safeName;
-      a.style.display = 'none';
-      
-      // Append, click, cleanup — all synchronous for maximum compatibility
-      document.body.appendChild(a);
-      a.click();
-      
-      // Cleanup after a short delay
-      window.setTimeout(function() {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 500);
-      
-    } catch (err) {
-      console.error('[Utils] Download failed:', err);
-      // Fallback: prompt user with data URI
-      try {
-        const reader = new FileReader();
-        reader.onload = function() {
-          const a = document.createElement('a');
-          a.href = reader.result;
-          a.download = safeName;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        };
-        reader.readAsDataURL(blob);
-      } catch (e2) {
-        console.error('[Utils] All download methods failed:', e2);
-        alert('Export failed. Please try again.');
-      }
-    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   /**
