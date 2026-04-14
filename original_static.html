@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اداة المعالجة الاحصائية المتقدمة</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+    
+    :root {
+      --primary-color: #2874a6;
+      --primary-dark: #1a5276;
+      --secondary-color: #2980b9;
+      --success-color: #16a085;
+      --error-color: #c0392b;
+      --warning-color: #f39c12;
+      --bg-light: #e9f0f7;
+      --bg-white: #fefefe;
+      --text-dark: #2c3e50;
+      --border-color: #aed6f1;
+      --shadow-sm: 0 4px 8px rgba(41, 128, 185, 0.2);
+      --shadow-md: 0 6px 12px rgba(41, 128, 185, 0.25);
+      --shadow-lg: 0 8px 15px rgba(0, 0, 0, 0.07);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Cairo', Tahoma, sans-serif;
+      background-color: var(--bg-light);
+      padding: 25px;
+      max-width: 1400px;
+      margin: auto;
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    
+    .main-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .main-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    
+    .main-header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    h2, h3 {
+      color: var(--primary-dark);
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #154360;
+      font-size: 16px;
+      gap: 8px;
+    }
+    
+    input, select {
+      padding: 12px 15px;
+      font-size: 16px;
+      font-family: 'Cairo', Tahoma, sans-serif;
+      width: 100%;
+      border: 2px solid var(--secondary-color);
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.3s ease;
+      background-color: white;
+    }
+    
+    input:focus, select:focus {
+      border-color: var(--primary-dark);
+      background-color: #d6eaf8;
+      box-shadow: 0 0 0 3px rgba(26, 82, 118, 0.1);
+    }
+    
+    input:disabled, select:disabled {
+      background-color: #ecf0f1;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      opacity: 1;
+	  
+    }
+    
+    button {
+      padding: 12px 28px;
+      background: linear-gradient(45deg, #2e86c1, var(--primary-color));
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      min-width: 140px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Cairo', Tahoma, sans-serif;
+    }
+    
+    button:hover:not(:disabled) {
+      background: linear-gradient(45deg, #1b4f72, #154360);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(41, 128, 185, 0.4);
+    }
+    
+    button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-delete {
+      background: linear-gradient(45deg, #c0392b, #a93226);
+      padding: 8px 15px;
+      min-width: 80px;
+      margin: 0;
+    }
+    
+    .btn-delete:hover:not(:disabled) {
+      background: linear-gradient(45deg, #922b21, #78281f);
+    }
+    
+    .btn-edit {
+      background: linear-gradient(45deg, #f39c12, #e67e22);
+      padding: 8px 15px;
+      min-width: 80px;
+      margin: 0;
+    }
+    
+    .btn-edit:hover:not(:disabled) {
+      background: linear-gradient(45deg, #d68910, #ca6f1e);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(45deg, #7f8c8d, #95a5a6);
+    }
+    
+    .btn-secondary:hover:not(:disabled) {
+      background: linear-gradient(45deg, #5d6d7e, #707b7c);
+    }
+    
+    .buttons-row {
+      display: flex;
+      justify-content: flex-start;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .section {
+      background: var(--bg-white);
+      border-radius: 12px;
+      padding: 25px 30px;
+      margin-top: 25px;
+      box-shadow: var(--shadow-lg);
+      border: 1.5px solid var(--secondary-color);
+    }
+    
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 25px;
+      background-color: white;
+      direction: rtl;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      font-size: 14px;
+    }
+    
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 12px 10px;
+      text-align: center;
+      vertical-align: middle;
+      transition: background-color 0.2s ease;
+    }
+    
+    th {
+      background-color: var(--primary-color);
+      color: #ecf0f1;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      font-size: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    tr:nth-child(even) td {
+      background-color: #f9fbfe;
+    }
+    
+    tr:hover td {
+      background-color: #d6eaf8;
+    }
+    
+    .summary-row {
+      background-color: #fef9e7 !important;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    
+    .summary-row td {
+      background-color: #fef9e7 !important;
+      border-top: 3px solid var(--warning-color);
+    }
+    
+    /* إخفاء عمود الإجراءات في الشاشة - لا */
+    .action-column {
+      /* يظهر في الشاشة العادية */
+    }
+    
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 14px;
+      color: #5d6d7e;
+      padding: 20px;
+      border-top: 2px solid var(--border-color);
+      position: relative;
+      min-height: 120px;
+    }
+    
+    .memorial-section {
+      position: absolute;
+      bottom: 20px;
+      left: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .memorial-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--primary-color);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      object-fit: cover;
+    }
+    
+    .memorial-text {
+      font-size: 12px;
+      color: var(--text-dark);
+      text-align: center;
+      line-height: 1.4;
+      max-width: 200px;
+      font-weight: 600;
+    }
+    
+    @media (max-width: 768px) {
+      .memorial-section {
+        position: static;
+        margin-top: 30px;
+      }
+    }
+    
+    .alert {
+      padding: 15px 20px;
+      margin-top: 15px;
+      border-radius: 8px;
+      font-weight: 600;
+      display: none;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .alert-error {
+      color: #7b241c;
+      background-color: #f9e6e6;
+      border: 1px solid var(--error-color);
+      border-right: 4px solid var(--error-color);
+    }
+    
+    .alert-success {
+      color: #0e6655;
+      background-color: #d5f4e6;
+      border: 1px solid var(--success-color);
+      border-right: 4px solid var(--success-color);
+    }
+    
+    .alert-warning {
+      color: #7d6608;
+      background-color: #fcf3cf;
+      border: 1px solid var(--warning-color);
+      border-right: 4px solid var(--warning-color);
+    }
+    
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+      color: var(--secondary-color);
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .tooltip:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #34495e;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      white-space: nowrap;
+      font-size: 13px;
+      font-weight: normal;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    
+    .tooltip:hover::before {
+      content: '';
+      position: absolute;
+      bottom: 115%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #34495e;
+      z-index: 1000;
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .summary-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .summary-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .summary-card h4 {
+      margin: 0 0 12px 0;
+      font-size: 15px;
+      opacity: 0.95;
+      font-weight: 600;
+    }
+    
+    .summary-card .value {
+      font-size: 32px;
+      font-weight: bold;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .hidden {
+      display: none !important;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .note-box {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-right: 4px solid #ffc107;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #856404;
+      line-height: 1.6;
+    }
+    
+    .note-box strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background-color: #ecf0f1;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--success-color), #1abc9c);
+      transition: width 0.3s ease;
+      border-radius: 10px;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 5px;
+    }
+    
+    .badge-primary {
+      background-color: #d6eaf8;
+      color: var(--primary-dark);
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      
+      .main-header h1 {
+        font-size: 22px;
+      }
+      
+      .section {
+        padding: 20px;
+      }
+      
+      table {
+        font-size: 12px;
+      }
+      
+      th, td {
+        padding: 8px 6px;
+      }
+      
+      .summary-card .value {
+        font-size: 24px;
+      }
+      
+      .buttons-row {
+        flex-direction: column;
+      }
+      
+      button {
+        width: 100%;
+      }
+    }
+    
+    /* قواعد الطباعة - إخفاء عمود الإجراءات */
+    @media print {
+      /* إخفاء الأقسام غير المطلوبة */
+      .section:not(#resultsSection):not(#summarySection),
+      .buttons-row,
+      footer {
+        display: none !important;
+      }
+      
+      body {
+        background: white;
+        padding: 10px;
+      }
+      
+      .main-header {
+        background: white !important;
+        color: black !important;
+        box-shadow: none;
+        border: 2px solid #000;
+      }
+      
+      /* إخفاء عمود الإجراءات تماماً في الطباعة */
+      #resultsTable thead tr th.action-column,
+      #resultsTable tbody tr td.action-column {
+        display: none !important;
+      }
+      
+      /* تحسين عرض الجدول في الطباعة */
+      table {
+        page-break-inside: auto;
+        border: 2px solid #000;
+      }
+      
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+      
+      thead {
+        display: table-header-group;
+      }
+      
+      /* ضمان ظهور الحدود بوضوح في الطباعة */
+      th, td {
+        border: 1px solid #000 !important;
+        padding: 8px !important;
+      }
+      
+      th {
+        background-color: #2874a6 !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .summary-row td {
+        background-color: #fef9e7 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- العنوان الرئيسي -->
+  <div class="main-header">
+    <h1>🎯 أداة المعالجة الإحصائية المتقدمة</h1>
+    <p>تحليل احترافي لاستبيانات مقياس ليكرت مع مؤشرات إحصائية شاملة</p>
+  </div>
+
+  <!-- قسم الإدخال -->
+  <div class="section">
+    <h3>⚙️ إعدادات الاستبيان</h3>
+    
+    <div class="grid-2">
+      <div class="form-group">
+        <label for="sampleSize">
+          📊 حجم العينة:
+          <span class="tooltip" data-tooltip="إجمالي عدد المشاركين في الاستبيان">ℹ️</span>
+        </label>
+        <input type="number" id="sampleSize" placeholder="مثال: 100" min="1" />
+      </div>
+
+      <div class="form-group">
+        <label for="scaleType">
+          ⚖️ نوع مقياس ليكرت:
+          <span class="tooltip" data-tooltip="اختر عدد خيارات الإجابة">ℹ️</span>
+        </label>
+        <select id="scaleType">
+          <option value="" selected>-- اختر نوع المقياس --</option>
+          <option value="2">ثنائي (موافق / لا أوافق)</option>
+          <option value="3">ثلاثي (موافق / محايد / لا أوافق)</option>
+          <option value="5">خماسي (موافق بشدة ... لا أوافق بشدة)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="questionNumber">
+        ❓ رقم السؤال:
+        <span class="tooltip" data-tooltip="رقم السؤال في الاستبيان (سيزداد تلقائياً)">ℹ️</span>
+      </label>
+      <input type="text" id="questionNumber" placeholder="مثال: 1" />
+    </div>
+
+    <!-- حاوية الأوزان -->
+    <div id="weightInputsContainer" class="hidden"></div>
+    
+    <!-- حاوية التكرارات -->
+    <div id="inputsContainer" class="hidden"></div>
+
+    <!-- أزرار الإجراءات -->
+    <div class="buttons-row">
+      <button id="calculateQuestionBtn" title="إضافة السؤال للجدول">
+        <span>➕</span>
+        <span id="btnText">إضافة السؤال</span>
+      </button>
+      
+      <button id="saveDataBtn" class="btn-secondary hidden" title="حفظ البيانات محلياً">
+        <span>💾</span>
+        <span>حفظ البيانات</span>
+      </button>
+      
+      <button id="loadDataBtn" class="btn-secondary hidden" title="استرجاع البيانات المحفوظة">
+        <span>📂</span>
+        <span>استرجاع البيانات</span>
+      </button>
+    </div>
+
+    <!-- رسائل التنبيه -->
+    <div id="errorMessage" class="alert alert-error"></div>
+    <div id="successMessage" class="alert alert-success"></div>
+    <div id="warningMessage" class="alert alert-warning"></div>
+  </div>
+
+  <!-- قسم النتائج -->
+  <div class="section" id="resultsSection">
+    <h3>📋 نتائج الأسئلة</h3>
+    <div id="questionsCount" style="margin-bottom: 15px; color: #5d6d7e;"></div>
+    
+    <div style="overflow-x: auto;">
+      <table id="resultsTable" dir="rtl">
+        <thead id="resultsTableHead"></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    
+    <div class="buttons-row">
+      <button onclick="exportToWord()" title="تصدير الجدول إلى ملف Word">
+        <span>📄</span>
+        <span>تصدير إلى Word</span>
+      </button>
+               
+      <button id="resetBtn" class="btn-delete" title="إعادة تعيين الأداة">
+        <span>🔄</span>
+        <span>معالجة جديدة</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- قسم التحليل العام -->
+  <div class="section hidden" id="summarySection">
+    <h3>📈 التحليل العام لجميع الأسئلة</h3>
+    <div class="summary-grid" id="summaryGrid"></div>
+    
+    <!-- النص التحليلي -->
+    <div id="analyticalText" style="margin-top: 30px;"></div>
+  </div>
+
+  <!-- التذييل -->
+  <footer>
+    <p><strong>أداة المعالجة الإحصائية المتقدمة</strong></p>
+    <p>حقوق النشر © 2025 - د. طلال ناظم الزهيري</p>
+    <p style="font-size: 12px; margin-top: 10px; color: #7f8c8d;">النسخة النهائية المحدثة 2.1</p>
+    
+    <div class="memorial-section">
+      <img src="k.jpg" alt="صورة الشهيد" class="memorial-image">
+      <p class="memorial-text">اضع هذه الاداة للاستخدام المجاني<br>بثواب روح اخي الشهيد<br>خضير ناظم الزهيري</p>
+    </div>
+  </footer>
+
+  <script>
+    'use strict';
+    
+    // ============================================
+    // الإعدادات والثوابت
+    // ============================================
+    
+    const CONFIG = {
+      scaleOptions: {
+        2: ["موافق", "لا أوافق"],
+        3: ["موافق", "محايد", "لا أوافق"],
+        5: ["موافق بشدة", "موافق", "محايد", "لا أوافق", "لا أوافق بشدة"]
+      },
+      defaultWeights: {
+        2: [2, 1],
+        3: [3, 2, 1],
+        5: [5, 4, 3, 2, 1]
+      },
+      storageKey: 'statisticalToolData',
+      messageTimeout: 5000
+    };
+
+    // ============================================
+    // المتغيرات العامة
+    // ============================================
+    
+    let fixedWeights = null;
+    let questionsData = [];
+    let editingIndex = -1;
+    
+    // ============================================
+    // عناصر DOM
+    // ============================================
+    
+    const elements = {
+      sampleSize: document.getElementById('sampleSize'),
+      scaleType: document.getElementById('scaleType'),
+      questionNumber: document.getElementById('questionNumber'),
+      weightInputsContainer: document.getElementById('weightInputsContainer'),
+      inputsContainer: document.getElementById('inputsContainer'),
+      resultsTable: document.getElementById('resultsTable'),
+      resultsBody: document.querySelector('#resultsTable tbody'),
+      resultsTableHead: document.getElementById('resultsTableHead'),
+      errorMessage: document.getElementById('errorMessage'),
+      successMessage: document.getElementById('successMessage'),
+      warningMessage: document.getElementById('warningMessage'),
+      summarySection: document.getElementById('summarySection'),
+      summaryGrid: document.getElementById('summaryGrid'),
+      analyticalText: document.getElementById('analyticalText'),
+      btnText: document.getElementById('btnText'),
+      calculateBtn: document.getElementById('calculateQuestionBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      saveDataBtn: document.getElementById('saveDataBtn'),
+      loadDataBtn: document.getElementById('loadDataBtn'),
+      questionsCount: document.getElementById('questionsCount')
+    };
+
+    // ============================================
+    // دوال المساعدة (Utility Functions)
+    // ============================================
+    
+    /**
+     * عرض رسالة للمستخدم
+     */
+    function showMessage(message, type = 'success') {
+      hideAllMessages();
+      
+      const messageMap = {
+        error: elements.errorMessage,
+        success: elements.successMessage,
+        warning: elements.warningMessage
+      };
+      
+      const messageElement = messageMap[type];
+      if (messageElement) {
+        messageElement.textContent = message;
+        messageElement.style.display = 'block';
+        
+        if (type === 'success') {
+          setTimeout(() => {
+            messageElement.style.display = 'none';
+          }, CONFIG.messageTimeout);
+        }
+      }
+    }
+    
+    function hideAllMessages() {
+      elements.errorMessage.style.display = 'none';
+      elements.successMessage.style.display = 'none';
+      elements.warningMessage.style.display = 'none';
+    }
+    
+    /**
+     * التحقق من صحة المدخلات
+     */
+    function validateInputs(questionNum, sampleSize, scaleVal) {
+      if (!questionNum.trim()) {
+        showMessage("⚠️ يرجى إدخال رقم السؤال.", 'error');
+        return false;
+      }
+      
+      if (!sampleSize || sampleSize <= 0) {
+        showMessage("⚠️ يرجى إدخال حجم عينة صحيح (أكبر من صفر).", 'error');
+        return false;
+      }
+      
+      if (!scaleVal) {
+        showMessage("⚠️ يرجى اختيار نوع المقياس.", 'error');
+        return false;
+      }
+      
+      return true;
+    }
+    
+    /**
+     * تحديث عداد الأسئلة
+     */
+    function updateQuestionsCount() {
+      const count = questionsData.length;
+      if (count > 0) {
+        elements.questionsCount.innerHTML = `
+          <span class="badge badge-primary">عدد الأسئلة: ${count}</span>
+          ${fixedWeights ? `<span class="badge badge-primary">نوع المقياس: ${elements.scaleType.value} نقاط</span>` : ''}
+          ${fixedWeights ? `<span class="badge badge-primary">حجم العينة: ${elements.sampleSize.value}</span>` : ''}
+        `;
+      } else {
+        elements.questionsCount.innerHTML = '';
+      }
+    }
+    
+    /**
+     * حفظ البيانات محلياً
+     */
+    function saveDataLocally() {
+      try {
+        const data = {
+          questionsData,
+          fixedWeights,
+          sampleSize: elements.sampleSize.value,
+          scaleType: elements.scaleType.value,
+          questionNumber: elements.questionNumber.value,
+          timestamp: new Date().toISOString()
+        };
+        
+        localStorage.setItem(CONFIG.storageKey, JSON.stringify(data));
+        showMessage('✓ تم حفظ البيانات بنجاح!', 'success');
+      } catch (error) {
+        showMessage('❌ حدث خطأ أثناء حفظ البيانات.', 'error');
+        console.error('Save error:', error);
+      }
+    }
+    
+    /**
+     * تحميل البيانات المحفوظة
+     */
+    function loadSavedData() {
+      try {
+        const savedData = localStorage.getItem(CONFIG.storageKey);
+        if (!savedData) {
+          showMessage('⚠️ لا توجد بيانات محفوظة.', 'warning');
+          return;
+        }
+        
+        const data = JSON.parse(savedData);
+        
+        if (confirm('هل تريد استرجاع البيانات المحفوظة؟ سيتم مسح البيانات الحالية.')) {
+          questionsData = data.questionsData || [];
+          fixedWeights = data.fixedWeights;
+          
+          elements.sampleSize.value = data.sampleSize || '';
+          elements.scaleType.value = data.scaleType || '';
+          elements.questionNumber.value = data.questionNumber || '';
+          
+          if (fixedWeights) {
+            elements.sampleSize.disabled = true;
+            elements.scaleType.disabled = true;
+          }
+          
+          // إعادة إنشاء واجهة الإدخال
+          if (data.scaleType) {
+            elements.scaleType.dispatchEvent(new Event('change'));
+          }
+          
+          renderTable();
+          updateSummary();
+          updateQuestionsCount();
+          
+          showMessage('✓ تم استرجاع البيانات بنجاح!', 'success');
+        }
+      } catch (error) {
+        showMessage('❌ حدث خطأ أثناء تحميل البيانات.', 'error');
+        console.error('Load error:', error);
+      }
+    }
+
+    // ============================================
+    // دوال الحسابات الإحصائية
+    // ============================================
+    
+    /**
+     * حساب المؤشرات الإحصائية
+     */
+    function calculateStatistics(counts, weights) {
+      const total = counts.reduce((sum, count) => sum + count, 0);
+      
+      if (total === 0) {
+        return { mean: 0, std: 0, variance: 0, cv: 0, median: 0 };
+      }
+      
+      // حساب الوسط المرجح
+      const weightedSum = counts.reduce((sum, count, i) => sum + count * weights[i], 0);
+      const mean = weightedSum / total;
+      
+      // حساب التباين والانحراف المعياري
+      let variance = 0;
+      for (let i = 0; i < counts.length; i++) {
+        variance += counts[i] * Math.pow(weights[i] - mean, 2);
+      }
+      variance = variance / total;
+      const std = Math.sqrt(variance);
+      
+      // حساب معامل الاختلاف
+      const cv = mean !== 0 ? (std / mean) * 100 : 0;
+      
+      // حساب الوسيط
+      const valuesArray = [];
+      for (let i = 0; i < counts.length; i++) {
+        for (let j = 0; j < counts[i]; j++) {
+          valuesArray.push(weights[i]);
+        }
+      }
+      valuesArray.sort((a, b) => a - b);
+      
+      const median = valuesArray.length % 2 === 0
+        ? (valuesArray[valuesArray.length / 2 - 1] + valuesArray[valuesArray.length / 2]) / 2
+        : valuesArray[Math.floor(valuesArray.length / 2)];
+      
+      return { mean, std, variance, cv, median };
+    }
+    
+    /**
+     * حساب المؤشرات العامة لجميع الأسئلة
+     */
+    function calculateOverallStatistics() {
+      if (questionsData.length === 0 || !fixedWeights) {
+        return null;
+      }
+      
+      const combinedCounts = new Array(fixedWeights.length).fill(0);
+      
+      questionsData.forEach(q => {
+        q.counts.forEach((count, i) => {
+          combinedCounts[i] += count;
+        });
+      });
+      
+      return calculateStatistics(combinedCounts, fixedWeights);
+    }
+
+    // ============================================
+    // دوال واجهة المستخدم
+    // ============================================
+    
+    /**
+     * تحديث رؤوس الجدول
+     */
+    function updateTableHeaders() {
+      const scaleVal = elements.scaleType.value;
+      const scale = CONFIG.scaleOptions[scaleVal];
+      
+      elements.resultsTableHead.innerHTML = '';
+      
+      if (!scale) return;
+      
+      const headerRow = document.createElement('tr');
+      
+      // الأعمدة الأساسية
+      ['رقم السؤال', 'حجم العينة', 'نوع المقياس'].forEach(text => {
+        const th = document.createElement('th');
+        th.textContent = text;
+        headerRow.appendChild(th);
+      });
+      
+      // أعمدة الفئات
+      scale.forEach(label => {
+        const th = document.createElement('th');
+        th.textContent = label;
+        th.title = `عدد الإجابات: ${label}`;
+        headerRow.appendChild(th);
+      });
+      
+      // أعمدة المؤشرات
+      [
+        { text: 'الوسط المرجح', title: 'المتوسط الحسابي المرجح' },
+        { text: 'الانحراف', title: 'الانحراف المعياري' },
+        { text: 'التباين', title: 'تباين البيانات' },
+        { text: 'معامل الاختلاف %', title: 'معامل الاختلاف (CV)' },
+        { text: 'الوسيط', title: 'القيمة الوسطى' }
+      ].forEach(({ text, title }) => {
+        const th = document.createElement('th');
+        th.textContent = text;
+        th.title = title;
+        headerRow.appendChild(th);
+      });
+      
+      // عمود الإجراءات - مع class خاص للإخفاء في الطباعة
+      const thActions = document.createElement('th');
+      thActions.textContent = 'إجراءات';
+      thActions.title = 'تعديل أو حذف';
+      thActions.className = 'action-column';
+      headerRow.appendChild(thActions);
+      
+      elements.resultsTableHead.appendChild(headerRow);
+    }
+    
+    /**
+     * إنشاء حقول الأوزان
+     */
+    function createWeightInputs(scale, scaleVal) {
+      elements.weightInputsContainer.innerHTML = `
+        <h4 style="color: #154360; margin-top: 0;">⚖️ أوزان الفئات:</h4>
+      `;
+      
+      // ملاحظة توضيحية
+      const noteDiv = document.createElement('div');
+      noteDiv.className = 'note-box';
+      noteDiv.innerHTML = `
+        <strong>💡 ملاحظة هامة:</strong>
+        يمكنك تعديل الأوزان حسب اتجاه المقياس (إيجابي أو سلبي). 
+        الأوزان الافتراضية تبدأ من ${scale.length} وتنازلياً.
+        <br>مثال: للمقاييس السلبية، يمكن عكس ترتيب الأوزان.
+      `;
+      elements.weightInputsContainer.appendChild(noteDiv);
+      
+      // حقول الإدخال
+      const weightsGrid = document.createElement('div');
+      weightsGrid.className = 'grid-2';
+      
+      scale.forEach((label, idx) => {
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        
+        const lbl = document.createElement('label');
+        lbl.textContent = `${label}:`;
+        
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.step = 'any';
+        input.placeholder = `الوزن لـ: ${label}`;
+        input.dataset.index = idx;
+        input.value = CONFIG.defaultWeights[scaleVal][idx];
+        input.required = true;
+        
+        formGroup.appendChild(lbl);
+        formGroup.appendChild(input);
+        weightsGrid.appendChild(formGroup);
+      });
+      
+      elements.weightInputsContainer.appendChild(weightsGrid);
+      elements.weightInputsContainer.classList.remove('hidden');
+    }
+    
+    /**
+     * إنشاء حقول التكرارات
+     */
+    function createCountInputs(scale) {
+      elements.inputsContainer.innerHTML = `
+        <h4 style="color: #154360; margin-top: 0;">📊 تكرارات الإجابات:</h4>
+      `;
+      
+      const countsGrid = document.createElement('div');
+      countsGrid.className = 'grid-2';
+      
+      scale.forEach(label => {
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        
+        const lbl = document.createElement('label');
+        lbl.textContent = `${label}:`;
+        
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.min = '0';
+        input.placeholder = `عدد الإجابات: ${label}`;
+        input.required = true;
+        input.addEventListener('input', validateCountsSum);
+        
+        formGroup.appendChild(lbl);
+        formGroup.appendChild(input);
+        countsGrid.appendChild(formGroup);
+      });
+      
+      elements.inputsContainer.appendChild(countsGrid);
+      
+      // شريط التقدم
+      const progressDiv = document.createElement('div');
+      progressDiv.innerHTML = `
+        <div style="margin-top: 15px; font-size: 14px; color: #5d6d7e;">
+          <span id="countsSum">المجموع: 0</span>
+          <span style="margin-right: 10px;" id="countsTarget">/ 0</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+        </div>
+      `;
+      elements.inputsContainer.appendChild(progressDiv);
+      
+      elements.inputsContainer.classList.remove('hidden');
+    }
+    
+    /**
+     * التحقق من مجموع التكرارات
+     */
+    function validateCountsSum() {
+      const sampleSize = parseInt(elements.sampleSize.value) || 0;
+      const countInputs = elements.inputsContainer.querySelectorAll('input[type="number"]');
+      const counts = Array.from(countInputs).map(input => parseInt(input.value) || 0);
+      const sum = counts.reduce((a, b) => a + b, 0);
+      
+      const sumElement = document.getElementById('countsSum');
+      const targetElement = document.getElementById('countsTarget');
+      const progressFill = document.getElementById('progressFill');
+      
+      if (sumElement) sumElement.textContent = `المجموع: ${sum}`;
+      if (targetElement) targetElement.textContent = `/ ${sampleSize}`;
+      
+      if (progressFill && sampleSize > 0) {
+        const percentage = Math.min((sum / sampleSize) * 100, 100);
+        progressFill.style.width = `${percentage}%`;
+        
+        if (sum === sampleSize) {
+          progressFill.style.background = 'linear-gradient(90deg, #16a085, #1abc9c)';
+        } else if (sum > sampleSize) {
+          progressFill.style.background = 'linear-gradient(90deg, #c0392b, #e74c3c)';
+        } else {
+          progressFill.style.background = 'linear-gradient(90deg, #f39c12, #e67e22)';
+        }
+      }
+    }
+    
+    /**
+     * عرض النتائج في الجدول
+     */
+    function renderTable() {
+      elements.resultsBody.innerHTML = '';
+      
+      questionsData.forEach((data, index) => {
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+          <td><strong>س${data.questionNum}</strong></td>
+          <td>${data.sampleSize}</td>
+          <td>${data.scaleVal} نقاط</td>
+          ${data.counts.map(c => `<td>${c}</td>`).join('')}
+          <td><strong>${data.stats.mean.toFixed(3)}</strong></td>
+          <td>${data.stats.std.toFixed(3)}</td>
+          <td>${data.stats.variance.toFixed(3)}</td>
+          <td>${data.stats.cv.toFixed(2)}%</td>
+          <td>${data.stats.median.toFixed(3)}</td>
+          <td class="action-column">
+            <div class="action-buttons">
+              <button class="btn-edit" onclick="editQuestion(${index})" title="تعديل السؤال">
+                ✏️ تعديل
+              </button>
+              <button class="btn-delete" onclick="deleteQuestion(${index})" title="حذف السؤال">
+                🗑️ حذف
+              </button>
+            </div>
+          </td>
+        `;
+        
+        elements.resultsBody.appendChild(row);
+      });
+      
+      // إضافة صف المعدل العام
+      if (questionsData.length > 0) {
+        const overallStats = calculateOverallStatistics();
+        if (overallStats) {
+          const summaryRow = document.createElement('tr');
+          summaryRow.className = 'summary-row';
+          
+          const combinedCounts = new Array(fixedWeights.length).fill(0);
+          questionsData.forEach(q => {
+            q.counts.forEach((count, i) => {
+              combinedCounts[i] += count;
+            });
+          });
+          
+          summaryRow.innerHTML = `
+            <td colspan="3"><strong>📊 المعدل العام</strong></td>
+            ${combinedCounts.map(c => `<td>${c}</td>`).join('')}
+            <td><strong>${overallStats.mean.toFixed(3)}</strong></td>
+            <td><strong>${overallStats.std.toFixed(3)}</strong></td>
+            <td><strong>${overallStats.variance.toFixed(3)}</strong></td>
+            <td><strong>${overallStats.cv.toFixed(2)}%</strong></td>
+            <td><strong>${overallStats.median.toFixed(3)}</strong></td>
+            <td class="action-column">-</td>
+          `;
+          
+          elements.resultsBody.appendChild(summaryRow);
+        }
+      }
+      
+      updateQuestionsCount();
+    }
+    
+    /**
+     * تحديث قسم التحليل العام
+     */
+    function updateSummary() {
+      if (questionsData.length === 0) {
+        elements.summarySection.classList.add('hidden');
+        return;
+      }
+      
+      elements.summarySection.classList.remove('hidden');
+      
+      const overallStats = calculateOverallStatistics();
+      if (!overallStats) return;
+      
+      const means = questionsData.map(q => q.stats.mean);
+      const maxMean = Math.max(...means);
+      const minMean = Math.min(...means);
+      
+      // بطاقات الملخص
+      elements.summaryGrid.innerHTML = `
+        <div class="summary-card">
+          <h4>عدد الأسئلة</h4>
+          <div class="value">${questionsData.length}</div>
+        </div>
+        <div class="summary-card">
+          <h4>الوسط المرجح العام</h4>
+          <div class="value">${overallStats.mean.toFixed(2)}</div>
+        </div>
+        <div class="summary-card">
+          <h4>الانحراف المعياري العام</h4>
+          <div class="value">${overallStats.std.toFixed(2)}</div>
+        </div>
+        <div class="summary-card">
+          <h4>التباين العام</h4>
+          <div class="value">${overallStats.variance.toFixed(2)}</div>
+        </div>
+        <div class="summary-card">
+          <h4>معامل الاختلاف العام</h4>
+          <div class="value">${overallStats.cv.toFixed(2)}%</div>
+        </div>
+        <div class="summary-card">
+          <h4>الوسيط العام</h4>
+          <div class="value">${overallStats.median.toFixed(2)}</div>
+        </div>
+        <div class="summary-card">
+          <h4>أعلى وسط مرجح</h4>
+          <div class="value">${maxMean.toFixed(2)}</div>
+        </div>
+        <div class="summary-card">
+          <h4>أقل وسط مرجح</h4>
+          <div class="value">${minMean.toFixed(2)}</div>
+        </div>
+      `;
+      
+      // النص التحليلي
+      generateAnalyticalText(overallStats, maxMean, minMean);
+    }
+    
+    /**
+     * توليد النص التحليلي
+     */
+    function generateAnalyticalText(stats, maxMean, minMean) {
+      const { mean, std, variance, cv, median } = stats;
+      const totalQuestions = questionsData.length;
+      const scaleVal = parseInt(elements.scaleType.value);
+      
+      // تحديد مستوى الموافقة
+      let agreementLevel, agreementDesc;
+      const maxWeight = Math.max(...fixedWeights);
+      const normalizedMean = (mean / maxWeight) * 100;
+      
+      if (normalizedMean >= 80) {
+        agreementLevel = 'موافقة عالية جداً';
+        agreementDesc = 'تشير إلى اتجاه إيجابي قوي وقبول واسع من المشاركين';
+      } else if (normalizedMean >= 70) {
+        agreementLevel = 'موافقة عالية';
+        agreementDesc = 'تعكس اتجاهاً إيجابياً ملحوظاً لدى المشاركين';
+      } else if (normalizedMean >= 60) {
+        agreementLevel = 'موافقة متوسطة';
+        agreementDesc = 'تشير إلى اتجاه محايد يميل نحو الإيجابية';
+      } else if (normalizedMean >= 50) {
+        agreementLevel = 'موافقة منخفضة';
+        agreementDesc = 'تعكس تحفظاً من المشاركين';
+      } else {
+        agreementLevel = 'عدم موافقة';
+        agreementDesc = 'تشير إلى اتجاه سلبي واضح لدى المشاركين';
+      }
+      
+      // تحديد مستوى التجانس
+      let homogeneityLevel, homogeneityDesc;
+      if (std < 0.5) {
+        homogeneityLevel = 'تجانس عالٍ جداً';
+        homogeneityDesc = 'مما يدل على إجماع قوي وتطابق كبير في الآراء';
+      } else if (std < 1.0) {
+        homogeneityLevel = 'تجانس جيد';
+        homogeneityDesc = 'يشير إلى اتساق ملحوظ في الإجابات مع تباين محدود';
+      } else if (std < 1.5) {
+        homogeneityLevel = 'تجانس متوسط';
+        homogeneityDesc = 'يعكس وجود بعض التباين في الآراء دون تشتت كبير';
+      } else {
+        homogeneityLevel = 'تباين ملحوظ';
+        homogeneityDesc = 'يشير إلى اختلاف واضح في وجهات نظر المشاركين';
+      }
+      
+      // تحديد مستوى الاتساق
+      let consistencyLevel, consistencyDesc;
+      if (cv < 15) {
+        consistencyLevel = 'اتساق ممتاز';
+        consistencyDesc = 'وهو ضمن المعايير المثالية للدراسات الإحصائية';
+      } else if (cv < 25) {
+        consistencyLevel = 'اتساق جيد';
+        consistencyDesc = 'وهو ضمن المدى المقبول للبحوث الاجتماعية';
+      } else if (cv < 35) {
+        consistencyLevel = 'اتساق مقبول';
+        consistencyDesc = 'مع وجود تنوع معتدل في الاستجابات';
+      } else {
+        consistencyLevel = 'تنوع كبير';
+        consistencyDesc = 'مما يستدعي فحصاً أعمق للعوامل المؤثرة';
+      }
+      
+      const range = maxMean - minMean;
+      const rangeDesc = range < 1 ? 'تقارب كبير' : range < 2 ? 'تباين معتدل' : 'تباين ملحوظ';
+      
+      elements.analyticalText.innerHTML = `
+        <div style="background-color: #f8f9fa; border-right: 5px solid var(--primary-color); border-radius: 10px; padding: 25px; line-height: 2; text-align: justify;">
+          <h3 style="color: var(--primary-dark); margin-bottom: 20px; text-align: center;">
+            📊 التحليل النوعي للنتائج
+          </h3>
+          
+          <div class="note-box" style="background: #e8f8f5; border-color: var(--success-color);">
+            <strong>📌 تنويه منهجي:</strong>
+            يعتمد التحليل العام على البيانات المجمعة لجميع الأسئلة، حيث تم دمج التكرارات 
+            واحتساب المؤشرات الإحصائية على مستوى الأداة ككل، وليس على أساس متوسط مؤشرات الأسئلة، 
+            وذلك لضمان دقة التمثيل الإحصائي للاتجاه العام لعينة الدراسة.
+          </div>
+          
+          <p style="margin: 20px 0; font-size: 15px;">
+            <strong style="color: var(--primary-dark);">أولاً: النظرة العامة</strong><br/>
+            بناءً على التحليل الإحصائي لـ <strong style="color: var(--primary-color);">(${totalQuestions})</strong> 
+            سؤالاً في الاستبيان، أظهرت النتائج أن متوسط الوسط الحسابي المرجح بلغ 
+            <strong style="color: var(--primary-color);">(${mean.toFixed(2)})</strong> 
+            من أصل <strong>(${maxWeight})</strong>، مما يعكس مستوى 
+            <strong style="color: var(--success-color);">${agreementLevel}</strong> من المشاركين، ${agreementDesc}.
+          </p>
+          
+          <p style="margin: 20px 0; font-size: 15px;">
+            <strong style="color: var(--primary-dark);">ثانياً: تجانس الآراء</strong><br/>
+            بلغ متوسط الانحراف المعياري <strong style="color: var(--primary-color);">(${std.toFixed(2)})</strong> 
+            وهو ما يشير إلى <strong style="color: var(--success-color);">${homogeneityLevel}</strong> ${homogeneityDesc}. 
+            كما بلغ متوسط التباين <strong>(${variance.toFixed(2)})</strong> مما يؤكد هذا التوجه في تحليل البيانات.
+          </p>
+          
+          <p style="margin: 20px 0; font-size: 15px;">
+            <strong style="color: var(--primary-dark);">ثالثاً: اتساق الاستجابات</strong><br/>
+            سجل معامل الاختلاف متوسطاً قدره <strong style="color: var(--primary-color);">(${cv.toFixed(2)}%)</strong> 
+            وهو يمثل <strong style="color: var(--success-color);">${consistencyLevel}</strong> ${consistencyDesc}. 
+            هذا المؤشر يعتبر مقياساً نسبياً مهماً لتقييم جودة البيانات المجمعة.
+          </p>
+          
+          <p style="margin: 20px 0; font-size: 15px;">
+            <strong style="color: var(--primary-dark);">رابعاً: النطاق والتباين</strong><br/>
+            تراوحت قيم الوسط الحسابي المرجح بين <strong style="color: var(--primary-color);">(${minMean.toFixed(2)})</strong> 
+            كأدنى قيمة و<strong style="color: var(--primary-color);">(${maxMean.toFixed(2)})</strong> كأعلى قيمة، 
+            مما يشير إلى <strong>${rangeDesc}</strong> في استجابات المشاركين عبر مختلف الأسئلة. 
+            كما بلغ متوسط الوسيط <strong>(${median.toFixed(2)})</strong> وهو قريب من المتوسط الحسابي، 
+            مما يعزز مصداقية التحليل.
+          </p>
+          
+          <p style="margin: 20px 0 0 0; font-size: 15px; padding: 15px; background: #e8f8f5; border-radius: 8px;">
+            <strong style="color: var(--primary-dark);">الخلاصة:</strong><br/>
+            ${normalizedMean >= 70 && cv < 25 
+              ? 'تشير المؤشرات الإحصائية بشكل عام إلى <strong style="color: var(--success-color);">نتائج إيجابية ومتسقة</strong> تعكس وضوحاً في توجهات المشاركين واتساقاً في آرائهم.'
+              : normalizedMean >= 60
+              ? 'تشير المؤشرات الإحصائية بشكل عام إلى <strong style="color: var(--warning-color);">نتائج مقبولة</strong> مع وجود مجال للتحسين في بعض المحاور.'
+              : 'تشير المؤشرات الإحصائية بشكل عام إلى <strong style="color: var(--error-color);">نتائج تستدعي إعادة النظر</strong> في العوامل المؤثرة ومعالجة نقاط الضعف المحددة.'}
+            ${cv > 30 ? '<br><br>💡 <em>يُنصح بإجراء تحليل أعمق للأسئلة ذات التباين العالي لفهم أسباب الاختلاف في الآراء.</em>' : ''}
+          </p>
+        </div>
+      `;
+    }
+
+    // ============================================
+    // معالجات الأحداث (Event Handlers)
+    // ============================================
+    
+    /**
+     * تغيير نوع المقياس
+     */
+    elements.scaleType.addEventListener('change', () => {
+      const scaleVal = elements.scaleType.value;
+      
+      // التحقق من وجود بيانات سابقة
+      if (questionsData.length > 0) {
+        showMessage('❌ لا يمكن تغيير نوع المقياس بعد إضافة أسئلة. يرجى إنهاء المعالجة الحالية أو إعادة التعيين.', 'error');
+        elements.scaleType.value = questionsData[0].scaleVal;
+        return;
+      }
+      
+      if (fixedWeights !== null) {
+        showMessage('❌ لا يمكن تغيير نوع المقياس بعد تثبيت الأوزان. يرجى إعادة التعيين.', 'error');
+        elements.scaleType.value = elements.scaleType.dataset.currentValue || '';
+        return;
+      }
+      
+      hideAllMessages();
+      
+      if (!scaleVal) {
+        elements.weightInputsContainer.classList.add('hidden');
+        elements.inputsContainer.classList.add('hidden');
+        return;
+      }
+      
+      elements.scaleType.dataset.currentValue = scaleVal;
+      
+      const scale = CONFIG.scaleOptions[scaleVal];
+      updateTableHeaders();
+      createWeightInputs(scale, scaleVal);
+      createCountInputs(scale);
+      
+      showMessage('✓ تم تعيين الأوزان الافتراضية. يمكنك تعديلها حسب الحاجة.', 'success');
+    });
+    
+    /**
+     * إضافة/تحديث سؤال
+     */
+    elements.calculateBtn.addEventListener('click', () => {
+      hideAllMessages();
+      
+      const questionNum = elements.questionNumber.value.trim();
+      const sampleSize = parseInt(elements.sampleSize.value);
+      const scaleVal = elements.scaleType.value;
+      
+      // التحقق من صحة المدخلات الأساسية
+      if (!validateInputs(questionNum, sampleSize, scaleVal)) {
+        return;
+      }
+      
+      const countInputs = elements.inputsContainer.querySelectorAll('input[type="number"]');
+      const weightInputs = elements.weightInputsContainer.querySelectorAll('input[type="number"]');
+      
+      // تثبيت الأوزان في المرة الأولى
+      if (!fixedWeights) {
+        fixedWeights = Array.from(weightInputs).map(input => parseFloat(input.value || '0'));
+        
+        if (fixedWeights.some(isNaN) || fixedWeights.some(w => w === 0)) {
+          showMessage("⚠️ يرجى إدخال الأوزان بشكل صحيح لكل فئة (لا يمكن أن تكون صفراً).", 'error');
+          fixedWeights = null;
+          return;
+        }
+        
+        // تعطيل الحقول
+        Array.from(weightInputs).forEach(input => input.disabled = true);
+        elements.sampleSize.disabled = true;
+        elements.scaleType.disabled = true;
+        
+        // إظهار أزرار الحفظ والتحميل
+        elements.saveDataBtn.classList.remove('hidden');
+        elements.loadDataBtn.classList.remove('hidden');
+        
+        showMessage('✓ تم تثبيت الأوزان وحجم العينة ونوع المقياس لجميع الأسئلة القادمة.', 'success');
+      }
+      
+      // جمع التكرارات
+      const counts = Array.from(countInputs).map(input => parseInt(input.value || '0'));
+      
+      if (counts.every(c => c === 0)) {
+        showMessage("⚠️ يرجى إدخال التكرارات لكل فئة.", 'error');
+        return;
+      }
+      
+      const total = counts.reduce((a, b) => a + b, 0);
+      
+      if (total !== sampleSize) {
+        showMessage(
+          `❌ مجموع التكرارات (${total}) لا يساوي حجم العينة (${sampleSize}). الفرق: ${Math.abs(total - sampleSize)}`,
+          'error'
+        );
+        return;
+      }
+      
+      // حساب المؤشرات الإحصائية
+      const stats = calculateStatistics(counts, fixedWeights);
+      
+      const questionData = {
+        questionNum,
+        sampleSize,
+        scaleVal,
+        counts: [...counts],
+        stats
+      };
+      
+      // تحديث أو إضافة
+      if (editingIndex >= 0) {
+        questionsData[editingIndex] = questionData;
+        editingIndex = -1;
+        elements.btnText.textContent = 'إضافة السؤال';
+        showMessage('✓ تم تحديث السؤال بنجاح!', 'success');
+      } else {
+        questionsData.push(questionData);
+        // زيادة رقم السؤال تلقائياً
+        const nextNum = parseInt(questionNum) + 1;
+        if (!isNaN(nextNum)) {
+          elements.questionNumber.value = nextNum;
+        }
+        showMessage('✓ تمت إضافة السؤال بنجاح!', 'success');
+      }
+      
+      renderTable();
+      updateSummary();
+      resetInputFields();
+      
+      // حفظ تلقائي
+      saveDataLocally();
+    });
+    
+    /**
+     * إعادة تعيين حقول الإدخال
+     */
+    function resetInputFields() {
+      const countInputs = elements.inputsContainer.querySelectorAll('input[type="number"]');
+      countInputs.forEach(input => input.value = '');
+      validateCountsSum();
+    }
+    
+    /**
+     * تعديل سؤال
+     */
+    window.editQuestion = function(index) {
+      const data = questionsData[index];
+      
+      elements.questionNumber.value = data.questionNum;
+      
+      const countInputs = elements.inputsContainer.querySelectorAll('input[type="number"]');
+      data.counts.forEach((count, i) => {
+        if (countInputs[i]) {
+          countInputs[i].value = count;
+        }
+      });
+      
+      editingIndex = index;
+      elements.btnText.textContent = 'تحديث السؤال';
+      
+      showMessage('💡 قم بتعديل البيانات ثم اضغط "تحديث السؤال"', 'success');
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      validateCountsSum();
+    };
+    
+    /**
+     * حذف سؤال
+     */
+    window.deleteQuestion = function(index) {
+      if (confirm(`هل أنت متأكد من حذف السؤال رقم ${questionsData[index].questionNum}؟`)) {
+        questionsData.splice(index, 1);
+        renderTable();
+        updateSummary();
+        showMessage('✓ تم حذف السؤال بنجاح!', 'success');
+        
+        if (questionsData.length === 0) {
+          resetAll();
+        } else {
+          saveDataLocally();
+        }
+      }
+    };
+    
+    /**
+     * إعادة تعيين الأداة بالكامل
+     */
+    function resetAll() {
+      fixedWeights = null;
+      questionsData = [];
+      editingIndex = -1;
+      
+      elements.sampleSize.disabled = false;
+      elements.scaleType.disabled = false;
+      elements.sampleSize.value = '';
+      elements.scaleType.value = '';
+      elements.questionNumber.value = '';
+      
+      elements.weightInputsContainer.innerHTML = '';
+      elements.inputsContainer.innerHTML = '';
+      elements.resultsBody.innerHTML = '';
+      elements.resultsTableHead.innerHTML = '';
+      elements.summaryGrid.innerHTML = '';
+      elements.analyticalText.innerHTML = '';
+      
+      elements.weightInputsContainer.classList.add('hidden');
+      elements.inputsContainer.classList.add('hidden');
+      elements.summarySection.classList.add('hidden');
+      elements.saveDataBtn.classList.add('hidden');
+      elements.loadDataBtn.classList.add('hidden');
+      
+      elements.btnText.textContent = 'إضافة السؤال';
+      elements.scaleType.dataset.currentValue = '';
+      
+      hideAllMessages();
+      updateQuestionsCount();
+      
+      // حذف البيانات المحفوظة
+      localStorage.removeItem(CONFIG.storageKey);
+    }
+    
+    /**
+     * زر إعادة التعيين
+     */
+    elements.resetBtn.addEventListener('click', () => {
+      if (questionsData.length > 0) {
+        if (!confirm('هل أنت متأكد من حذف جميع البيانات وبدء معالجة جديدة؟\n\nسيتم حذف جميع الأسئلة والإعدادات الحالية.')) {
+          return;
+        }
+      }
+      
+      resetAll();
+      showMessage('✓ تم إعادة تعيين الأداة بنجاح! يمكنك البدء بمعالجة جديدة.', 'success');
+    });
+    
+    /**
+     * حفظ البيانات
+     */
+    elements.saveDataBtn.addEventListener('click', saveDataLocally);
+    
+    /**
+     * تحميل البيانات
+     */
+    elements.loadDataBtn.addEventListener('click', loadSavedData);
+
+    // ============================================
+    // دوال التصدير
+    // ============================================
+    
+    /**
+     * التصدير إلى Word
+     */
+    window.exportToWord = function() {
+  if (questionsData.length === 0) {
+    showMessage("⚠️ لا توجد بيانات لتصديرها.", 'warning');
+    return;
+  }
+
+  hideAllMessages();
+
+  // استنساخ الجدول كاملاً
+  const tableClone = elements.resultsTable.cloneNode(true);
+
+  // إزالة عمود الإجراءات من الرأس
+  const headerRow = tableClone.querySelector('thead tr');
+  if (headerRow) {
+    const actionHeader = headerRow.querySelector('.action-column');
+    if (actionHeader) {
+      actionHeader.remove();
+    }
+  }
+
+  // إزالة عمود الإجراءات من جميع الصفوف
+  const dataRows = tableClone.querySelectorAll('tbody tr');
+  dataRows.forEach(row => {
+    const actionCell = row.querySelector('.action-column');
+    if (actionCell) {
+      actionCell.remove();
+    }
+  });
+
+  const htmlContent = `
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>نتائج المعالجة الإحصائية</title>
+    <style>
+  body { 
+    font-family: 'Arial', Simplified Arabic; 
+    direction: rtl; 
+    text-align: center;   /* يجعل العنوان أيضاً في المنتصف */
+  }
+  table { 
+    border-collapse: collapse; 
+    width: 90%; 
+    margin: 0 auto; 
+  }
+  th, td { 
+    border: 1px solid #000; 
+    padding: 8px; 
+    text-align: center; 
+  }
+  th { 
+    background-color: #2874a6; 
+    color: white; 
+  }
+  .summary-row td {
+    background-color: #fef9e7;
+    font-weight: bold;
+  }
+  h2 {
+    text-align: center;
+  }
+</style>
+  </head>
+  <body>
+    <h2>نتائج المعالجة الإحصائية</h2>
+    ${tableClone.outerHTML}
+    <br/>
+    ${elements.analyticalText.innerHTML}
+  </body>
+  </html>
+  `;
+
+  const blob = new Blob(['\ufeff', htmlContent], {
+    type: 'application/msword'
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "نتائج_المعالجة_الإحصائية.doc";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  showMessage("✓ تم تصدير الملف بنجاح.", 'success');
+};
+
+  </script>
+</body>
+</html>
