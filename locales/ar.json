@@ -173,10 +173,11 @@
     "github": "العرض على GitHub"
   },
   "export": {
-    "wordTitle": "نتائج المعالجة الإحصائية",
-    "wordFilename": "نتائج_المعالجة_الإحصائية",
-    "csvFilename": "statistical_results",
-    "jsonFilename": "stts_data"
+    "wordTitle": "تقرير التحليل الإحصائي — بصيرة",
+    "wordSubtitle": "تم إنشاؤه بواسطة منصة بصيرة للتحليل الإحصائي",
+    "wordFilename": "Basira_Analytics_Report",
+    "csvFilename": "Basira_Analytics_Data",
+    "jsonFilename": "Basira_Analytics_Export"
   },
   "chart": {
     "responseDistribution": "توزيع الاستجابات",

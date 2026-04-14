@@ -133,7 +133,7 @@ const Storage = (() => {
     const payload = {
       version: DATA_VERSION,
       exportedAt: new Date().toISOString(),
-      tool: 'STTS - Advanced Statistical Processing Tool',
+      tool: 'Basira Analytics (بصيرة) — Professional Statistical Analysis Platform',
       questionsData: data.questionsData || [],
       fixedWeights: data.fixedWeights,
       sampleSize: data.sampleSize,
