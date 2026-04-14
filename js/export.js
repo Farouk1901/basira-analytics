@@ -1,6 +1,6 @@
 /**
  * STTS — Export Module
- * Export to Word, PDF, CSV, Excel, and JSON.
+ * Export to Word, CSV, and JSON with proper file extensions.
  */
 'use strict';
 
@@ -83,7 +83,8 @@ const Export = (() => {
     `;
 
     const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
-    Utils.downloadBlob(blob, `${t('export.wordFilename')}.doc`);
+    const filename = 'Basira_Statistical_Results.doc';
+    Utils.downloadBlob(blob, filename);
   }
 
   /**
@@ -126,7 +127,8 @@ const Export = (() => {
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-    Utils.downloadBlob(blob, `${t('export.csvFilename')}.csv`);
+    const filename = 'Basira_Statistical_Results.csv';
+    Utils.downloadBlob(blob, filename);
   }
 
   /**
@@ -136,7 +138,8 @@ const Export = (() => {
    */
   function toJSON(appState, t) {
     const blob = Storage.exportJSON(appState);
-    Utils.downloadBlob(blob, `${t('export.jsonFilename')}.json`);
+    const filename = 'Basira_Data_Export.json';
+    Utils.downloadBlob(blob, filename);
   }
 
   /**
