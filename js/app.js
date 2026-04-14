@@ -962,29 +962,44 @@ const App = (() => {
   function _exportWord() {
     const t = I18n.t.bind(I18n);
     if (questionsData.length === 0) { _showMessage(t('messages.noDataExport'), 'warning'); return; }
-    Export.toWord(els.resultsTable, els.analyticalText, t, I18n.isRTL());
-    _showMessage(t('messages.exportSuccess'), 'success');
+    try {
+      Export.toWord(els.resultsTable, els.analyticalText, t, I18n.isRTL());
+      _showMessage(t('messages.exportSuccess'), 'success');
+    } catch (err) {
+      console.error('[Export] Word export error:', err);
+      _showMessage('❌ Export error: ' + err.message, 'error');
+    }
   }
 
   function _exportCSV() {
     const t = I18n.t.bind(I18n);
     if (questionsData.length === 0) { _showMessage(t('messages.noDataExport'), 'warning'); return; }
-    const scaleLabels = I18n.getScaleOptions()[els.scaleType.value] || [];
-    Export.toCSV(questionsData, scaleLabels, t);
-    _showMessage(t('messages.exportSuccess'), 'success');
+    try {
+      const scaleLabels = I18n.getScaleOptions()[els.scaleType.value] || [];
+      Export.toCSV(questionsData, scaleLabels, t);
+      _showMessage(t('messages.exportSuccess'), 'success');
+    } catch (err) {
+      console.error('[Export] CSV export error:', err);
+      _showMessage('❌ Export error: ' + err.message, 'error');
+    }
   }
 
   function _exportJSON() {
     const t = I18n.t.bind(I18n);
     if (questionsData.length === 0) { _showMessage(t('messages.noDataExport'), 'warning'); return; }
-    Export.toJSON({
-      questionsData,
-      fixedWeights,
-      sampleSize: els.sampleSize.value,
-      scaleType: els.scaleType.value,
-      useSampleVariance
-    }, t);
-    _showMessage(t('messages.exportSuccess'), 'success');
+    try {
+      Export.toJSON({
+        questionsData,
+        fixedWeights,
+        sampleSize: els.sampleSize.value,
+        scaleType: els.scaleType.value,
+        useSampleVariance
+      }, t);
+      _showMessage(t('messages.exportSuccess'), 'success');
+    } catch (err) {
+      console.error('[Export] JSON export error:', err);
+      _showMessage('❌ Export error: ' + err.message, 'error');
+    }
   }
 
   async function _importJSON() {

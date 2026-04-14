@@ -137,14 +137,33 @@ const Utils = (() => {
    * @param {string} filename
    */
   function downloadBlob(blob, filename) {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    try {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      // Use setTimeout to ensure the DOM has updated before triggering click
+      setTimeout(() => {
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 250);
+      }, 0);
+    } catch (err) {
+      console.error('[Utils] Download failed:', err);
+      // Fallback: open blob in new window
+      try {
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+      } catch (e2) {
+        console.error('[Utils] Fallback download also failed:', e2);
+        alert('Export failed. Please try again.');
+      }
+    }
   }
 
   /**
