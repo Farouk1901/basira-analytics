@@ -1,7 +1,7 @@
 {
   "app": {
-    "title": "Advanced Statistical Processing Tool",
-    "subtitle": "Professional analysis of Likert scale questionnaires with comprehensive statistical indicators",
+    "title": "🧠 Basira Analytics — بصيرة",
+    "subtitle": "Professional Multi-Tool Statistical Analysis Platform",
     "version": "3.0",
     "langToggle": "العربية",
     "themeToggle": "Dark Mode",
@@ -169,7 +169,7 @@
     "confirmDelete": "Are you sure you want to delete question #{num}?"
   },
   "footer": {
-    "copyright": "© {year} — Advanced Statistical Processing Tool — Version 3.0",
+    "copyright": "© {year} — Basira Analytics (بصيرة) — All Rights Reserved © Engineer Ahmed Gohary",
     "github": "View on GitHub"
   },
   "export": {

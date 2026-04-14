@@ -1,7 +1,7 @@
 {
   "app": {
-    "title": "أداة المعالجة الإحصائية المتقدمة",
-    "subtitle": "تحليل احترافي لاستبيانات مقياس ليكرت مع مؤشرات إحصائية شاملة",
+    "title": "🧠 Basira Analytics — بصيرة",
+    "subtitle": "منصة تحليل إحصائي احترافية متعددة الأدوات",
     "version": "3.0",
     "langToggle": "English",
     "themeToggle": "الوضع الداكن",
@@ -169,7 +169,7 @@
     "confirmDelete": "هل أنت متأكد من حذف السؤال رقم {num}؟"
   },
   "footer": {
-    "copyright": "© {year} — أداة المعالجة الإحصائية المتقدمة — الإصدار 3.0",
+    "copyright": "© {year} — Basira Analytics (بصيرة) — All Rights Reserved © Engineer Ahmed Gohary",
     "github": "العرض على GitHub"
   },
   "export": {

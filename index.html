@@ -3,192 +3,292 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="أداة المعالجة الإحصائية المتقدمة — تحليل احترافي لاستبيانات مقياس ليكرت مع مؤشرات إحصائية شاملة — Advanced Statistical Processing Tool" />
-  <meta name="author" content="STTS Project" />
-  <meta name="keywords" content="statistical analysis, Likert scale, questionnaire, survey, إحصاء, مقياس ليكرت, استبيان" />
-  <meta property="og:title" content="STTS — Advanced Statistical Processing Tool" />
-  <meta property="og:description" content="Professional Likert scale questionnaire analysis with comprehensive statistical indicators — bilingual Arabic & English" />
-  <meta property="og:type" content="website" />
+  <meta name="description" content="Basira Analytics (بصيرة) — منصة تحليل إحصائي احترافية متعددة الأدوات — Professional Multi-Tool Statistical Analysis Platform" />
+  <meta name="author" content="Engineer Ahmed Gohary" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <title>STTS — أداة المعالجة الإحصائية المتقدمة</title>
+  <title>Basira Analytics — بصيرة</title>
   <link rel="stylesheet" href="css/styles.css" />
-  <!-- Chart.js CDN with SRI -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════
-       HEADER
-  ═══════════════════════════════════════════ -->
+  <!-- ═══════════════════ HEADER ═══════════════════ -->
   <header class="main-header">
-    <h1 id="appTitle">🎯 أداة المعالجة الإحصائية المتقدمة</h1>
-    <p id="appSubtitle">تحليل احترافي لاستبيانات مقياس ليكرت مع مؤشرات إحصائية شاملة</p>
+    <h1 id="appTitle">🧠 Basira Analytics — بصيرة</h1>
+    <p id="appSubtitle">منصة تحليل إحصائي احترافية متعددة الأدوات</p>
     <div class="header-controls">
-      <button class="toggle-btn" id="langToggleBtn" title="Switch Language">
-        <span class="icon">🌍</span> English
-      </button>
-      <button class="toggle-btn" id="themeToggleBtn" title="Toggle Theme">
-        <span class="icon">🌙</span> الوضع الداكن
-      </button>
+      <button class="toggle-btn" id="langToggleBtn"><span class="icon">🌍</span> English</button>
+      <button class="toggle-btn" id="themeToggleBtn"><span class="icon">🌙</span> الوضع الداكن</button>
     </div>
   </header>
 
-  <!-- ═══════════════════════════════════════════
-       SETTINGS SECTION
-  ═══════════════════════════════════════════ -->
-  <section class="section" id="settingsSection">
-    <h3 id="settingsTitle">⚙️ إعدادات الاستبيان</h3>
+  <!-- ═══════════════════ TAB NAVIGATION ═══════════════════ -->
+  <nav class="tab-nav" id="mainTabs">
+    <button class="tab-btn active" data-tab="likert"><span class="tab-icon">📋</span> <span data-i18n="tabs.likert">ليكرت</span></button>
+    <button class="tab-btn" data-tab="descriptive"><span class="tab-icon">📊</span> <span data-i18n="tabs.descriptive">وصفي</span></button>
+    <button class="tab-btn" data-tab="ttest"><span class="tab-icon">🔬</span> <span data-i18n="tabs.ttest">اختبار T</span></button>
+    <button class="tab-btn" data-tab="anova"><span class="tab-icon">📈</span> <span data-i18n="tabs.anova">ANOVA</span></button>
+    <button class="tab-btn" data-tab="correlation"><span class="tab-icon">🔗</span> <span data-i18n="tabs.correlation">ارتباط</span></button>
+    <button class="tab-btn" data-tab="chisquare"><span class="tab-icon">🎲</span> <span data-i18n="tabs.chisquare">مربع كاي</span></button>
+  </nav>
 
-    <div class="grid-2">
-      <!-- Sample Size -->
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB 1: LIKERT ANALYSIS (existing tool — preserved)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel active" id="panel-likert">
+    <section class="section" id="settingsSection">
+      <h3 id="settingsTitle">⚙️ إعدادات الاستبيان</h3>
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="sampleSize" id="sampleSizeLabel">📊 حجم العينة: <span class="tooltip" data-tooltip="إجمالي عدد المشاركين">ℹ️</span></label>
+          <input type="number" id="sampleSize" placeholder="مثال: 100" min="1" />
+        </div>
+        <div class="form-group">
+          <label for="scaleType" id="scaleTypeLabel">⚖️ نوع مقياس ليكرت: <span class="tooltip" data-tooltip="اختر عدد خيارات الإجابة">ℹ️</span></label>
+          <select id="scaleType">
+            <option value="">-- اختر نوع المقياس --</option>
+            <option value="2">ثنائي (موافق / لا أوافق)</option>
+            <option value="3">ثلاثي (موافق / محايد / لا أوافق)</option>
+            <option value="5">خماسي (موافق بشدة ... لا أوافق بشدة)</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="questionNumber" id="questionNumberLabel">❓ رقم السؤال: <span class="tooltip" data-tooltip="رقم السؤال (سيزداد تلقائياً)">ℹ️</span></label>
+          <input type="text" id="questionNumber" placeholder="مثال: 1" />
+        </div>
+        <div class="form-group">
+          <label for="varianceType" id="varianceTypeLabel">📐 نوع التباين: <span class="tooltip" data-tooltip="اختر طريقة حساب التباين">ℹ️</span></label>
+          <select id="varianceType">
+            <option value="sample" selected>تباين العينة (N-1)</option>
+            <option value="population">تباين المجتمع (N)</option>
+          </select>
+        </div>
+      </div>
+      <div id="weightInputsContainer" class="hidden"></div>
+      <div id="inputsContainer" class="hidden"></div>
+      <div class="buttons-row">
+        <button id="calculateQuestionBtn"><span id="btnText">➕ إضافة السؤال</span></button>
+        <button id="saveDataBtn" class="btn-secondary hidden"><span id="saveDataText">💾 حفظ البيانات</span></button>
+        <button id="loadDataBtn" class="btn-secondary hidden"><span id="loadDataText">📂 استرجاع البيانات</span></button>
+      </div>
+      <div id="errorMessage" class="alert alert-error"></div>
+      <div id="successMessage" class="alert alert-success"></div>
+      <div id="warningMessage" class="alert alert-warning"></div>
+    </section>
+
+    <section class="section" id="resultsSection">
+      <h3 id="resultsTitle">📋 نتائج الأسئلة</h3>
+      <div id="questionsCount" style="margin-bottom:12px"></div>
+      <div class="table-container">
+        <table id="resultsTable"><thead id="resultsTableHead"></thead><tbody></tbody></table>
+      </div>
+      <div class="buttons-row">
+        <button id="exportWordBtn"><span id="exportWordText">📄 تصدير Word</span></button>
+        <button id="exportCSVBtn" class="btn-success"><span id="exportCSVText">📊 تصدير CSV</span></button>
+        <button id="exportJSONBtn" class="btn-secondary"><span id="exportJSONText">💿 تصدير JSON</span></button>
+        <button id="importJSONBtn" class="btn-outline"><span id="importJSONText">📥 استيراد JSON</span></button>
+        <button id="resetBtn" class="btn-delete"><span id="resetText">🔄 معالجة جديدة</span></button>
+      </div>
+    </section>
+
+    <section class="section hidden" id="chartSection">
+      <h3 id="chartTitle">📊 توزيع الاستجابات</h3>
+      <div class="grid-2">
+        <div class="chart-container"><canvas id="barChart"></canvas></div>
+        <div class="chart-container"><canvas id="radarChart"></canvas></div>
+      </div>
+    </section>
+
+    <section class="section hidden" id="summarySection">
+      <h3 id="summaryTitle">📈 التحليل العام</h3>
+      <div class="summary-grid" id="summaryGrid"></div>
+      <div id="analyticalText"></div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB 2: DESCRIPTIVE STATISTICS
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-descriptive">
+    <section class="section">
+      <h3><span data-i18n="desc.title">📊 الإحصاء الوصفي</span></h3>
+      <p data-i18n="desc.subtitle" style="color:var(--text-tertiary);font-size:0.9rem">أدخل البيانات الرقمية لحساب المؤشرات الإحصائية الأساسية.</p>
+
       <div class="form-group">
-        <label for="sampleSize" id="sampleSizeLabel">
-          📊 حجم العينة:
-          <span class="tooltip" data-tooltip="إجمالي عدد المشاركين في الاستبيان">ℹ️</span>
-        </label>
-        <input type="number" id="sampleSize" placeholder="مثال: 100" min="1" />
+        <label data-i18n="desc.inputLabel">📝 أدخل البيانات (رقم واحد في كل سطر، أو مفصولة بفاصلة):</label>
+        <textarea id="descData" rows="6" placeholder="5, 8, 12, 7, 9, 15, 11, 6&#10;أو:&#10;5&#10;8&#10;12&#10;7"></textarea>
+        <p class="input-hint" data-i18n="desc.hint">يمكنك لصق البيانات من Excel أو إدخالها يدوياً</p>
       </div>
 
-      <!-- Likert Scale Type -->
+      <div class="buttons-row">
+        <button onclick="BasiraUI.runDescriptive()"><span data-i18n="desc.calculate">📊 حساب الإحصائيات</span></button>
+        <button class="btn-outline" onclick="BasiraUI.uploadCSVFor('descriptive')"><span data-i18n="common.uploadCSV">📂 تحميل CSV</span></button>
+      </div>
+
+      <div id="descResults"></div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB 3: T-TESTS
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-ttest">
+    <section class="section">
+      <h3><span data-i18n="ttest.title">🔬 اختبار T</span></h3>
+
       <div class="form-group">
-        <label for="scaleType" id="scaleTypeLabel">
-          ⚖️ نوع مقياس ليكرت:
-          <span class="tooltip" data-tooltip="اختر عدد خيارات الإجابة">ℹ️</span>
-        </label>
-        <select id="scaleType">
-          <option value="" selected>-- اختر نوع المقياس --</option>
-          <option value="2">ثنائي (موافق / لا أوافق)</option>
-          <option value="3">ثلاثي (موافق / محايد / لا أوافق)</option>
-          <option value="5">خماسي (موافق بشدة ... لا أوافق بشدة)</option>
+        <label data-i18n="ttest.typeLabel">نوع الاختبار:</label>
+        <select id="ttestType" onchange="BasiraUI.toggleTTestType()">
+          <option value="independent" data-i18n="ttest.independent">عينتان مستقلتان</option>
+          <option value="paired" data-i18n="ttest.paired">عينتان مزدوجتان</option>
         </select>
       </div>
-    </div>
 
-    <div class="grid-2">
-      <!-- Question Number -->
-      <div class="form-group">
-        <label for="questionNumber" id="questionNumberLabel">
-          ❓ رقم السؤال:
-          <span class="tooltip" data-tooltip="رقم السؤال في الاستبيان (سيزداد تلقائياً)">ℹ️</span>
-        </label>
-        <input type="text" id="questionNumber" placeholder="مثال: 1" />
+      <div class="grid-2">
+        <div class="form-group">
+          <label id="ttest-label1" data-i18n="ttest.group1">📝 المجموعة الأولى:</label>
+          <textarea id="ttestGroup1" rows="5" placeholder="5, 8, 12, 7, 9"></textarea>
+        </div>
+        <div class="form-group">
+          <label id="ttest-label2" data-i18n="ttest.group2">📝 المجموعة الثانية:</label>
+          <textarea id="ttestGroup2" rows="5" placeholder="3, 6, 10, 5, 7"></textarea>
+        </div>
       </div>
 
-      <!-- Variance Type -->
+      <div class="buttons-row">
+        <button onclick="BasiraUI.runTTest()"><span data-i18n="ttest.calculate">🔬 تنفيذ الاختبار</span></button>
+      </div>
+
+      <div id="ttestResults"></div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB 4: ANOVA
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-anova">
+    <section class="section">
+      <h3><span data-i18n="anova.title">📈 تحليل التباين الأحادي (ANOVA)</span></h3>
+      <p style="color:var(--text-tertiary);font-size:0.9rem" data-i18n="anova.subtitle">قارن متوسطات ثلاث مجموعات أو أكثر.</p>
+
       <div class="form-group">
-        <label for="varianceType" id="varianceTypeLabel">
-          📐 نوع التباين:
-          <span class="tooltip" data-tooltip="اختر طريقة حساب التباين">ℹ️</span>
-        </label>
-        <select id="varianceType">
-          <option value="sample" selected>تباين العينة (N-1)</option>
-          <option value="population">تباين المجتمع (N)</option>
+        <label data-i18n="anova.groupCount">عدد المجموعات:</label>
+        <select id="anovaGroupCount" onchange="BasiraUI.buildAnovaInputs()">
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
         </select>
       </div>
-    </div>
 
-    <!-- Weights Container -->
-    <div id="weightInputsContainer" class="hidden"></div>
+      <div id="anovaInputs"></div>
 
-    <!-- Counts Container -->
-    <div id="inputsContainer" class="hidden"></div>
-
-    <!-- Action Buttons -->
-    <div class="buttons-row">
-      <button id="calculateQuestionBtn" title="إضافة السؤال للجدول">
-        <span id="btnText">➕ إضافة السؤال</span>
-      </button>
-      <button id="saveDataBtn" class="btn-secondary hidden" title="حفظ البيانات محلياً">
-        <span id="saveDataText">💾 حفظ البيانات</span>
-      </button>
-      <button id="loadDataBtn" class="btn-secondary hidden" title="استرجاع البيانات المحفوظة">
-        <span id="loadDataText">📂 استرجاع البيانات</span>
-      </button>
-    </div>
-
-    <!-- Alert Messages -->
-    <div id="errorMessage" class="alert alert-error"></div>
-    <div id="successMessage" class="alert alert-success"></div>
-    <div id="warningMessage" class="alert alert-warning"></div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════
-       RESULTS SECTION
-  ═══════════════════════════════════════════ -->
-  <section class="section" id="resultsSection">
-    <h3 id="resultsTitle">📋 نتائج الأسئلة</h3>
-    <div id="questionsCount" style="margin-bottom:12px;color:var(--text-secondary)"></div>
-
-    <div class="table-container">
-      <table id="resultsTable">
-        <thead id="resultsTableHead"></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <div class="buttons-row">
-      <button id="exportWordBtn" title="تصدير إلى Word">
-        <span id="exportWordText">📄 تصدير إلى Word</span>
-      </button>
-      <button id="exportCSVBtn" class="btn-success" title="تصدير إلى CSV">
-        <span id="exportCSVText">📊 تصدير إلى CSV</span>
-      </button>
-      <button id="exportJSONBtn" class="btn-secondary" title="تصدير JSON">
-        <span id="exportJSONText">💿 تصدير JSON</span>
-      </button>
-      <button id="importJSONBtn" class="btn-outline" title="استيراد JSON">
-        <span id="importJSONText">📥 استيراد JSON</span>
-      </button>
-      <button id="resetBtn" class="btn-delete" title="إعادة تعيين الأداة">
-        <span id="resetText">🔄 معالجة جديدة</span>
-      </button>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════
-       CHARTS SECTION
-  ═══════════════════════════════════════════ -->
-  <section class="section hidden" id="chartSection">
-    <h3 id="chartTitle">📊 توزيع الاستجابات</h3>
-    <div class="grid-2">
-      <div class="chart-container">
-        <canvas id="barChart"></canvas>
+      <div class="buttons-row">
+        <button onclick="BasiraUI.runANOVA()"><span data-i18n="anova.calculate">📈 تنفيذ ANOVA</span></button>
       </div>
-      <div class="chart-container">
-        <canvas id="radarChart"></canvas>
+
+      <div id="anovaResults"></div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB 5: CORRELATION
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-correlation">
+    <section class="section">
+      <h3><span data-i18n="corr.title">🔗 تحليل الارتباط</span></h3>
+
+      <div class="form-group">
+        <label data-i18n="corr.typeLabel">نوع الارتباط:</label>
+        <select id="corrType">
+          <option value="pearson">Pearson (بيرسون)</option>
+          <option value="spearman">Spearman (سبيرمان)</option>
+        </select>
       </div>
-    </div>
-  </section>
 
-  <!-- ═══════════════════════════════════════════
-       SUMMARY SECTION
-  ═══════════════════════════════════════════ -->
-  <section class="section hidden" id="summarySection">
-    <h3 id="summaryTitle">📈 التحليل العام لجميع الأسئلة</h3>
-    <div class="summary-grid" id="summaryGrid"></div>
-    <div id="analyticalText" style="margin-top:24px"></div>
-  </section>
+      <div class="grid-2">
+        <div class="form-group">
+          <label data-i18n="corr.varX">📝 المتغير X:</label>
+          <textarea id="corrX" rows="5" placeholder="10, 20, 30, 40, 50"></textarea>
+        </div>
+        <div class="form-group">
+          <label data-i18n="corr.varY">📝 المتغير Y:</label>
+          <textarea id="corrY" rows="5" placeholder="15, 25, 35, 45, 55"></textarea>
+        </div>
+      </div>
 
-  <!-- ═══════════════════════════════════════════
-       FOOTER
-  ═══════════════════════════════════════════ -->
+      <div class="buttons-row">
+        <button onclick="BasiraUI.runCorrelation()"><span data-i18n="corr.calculate">🔗 حساب الارتباط</span></button>
+      </div>
+
+      <div id="corrResults"></div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB 6: CHI-SQUARE
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-chisquare">
+    <section class="section">
+      <h3><span data-i18n="chi.title">🎲 اختبار مربع كاي (Chi-Square)</span></h3>
+      <p style="color:var(--text-tertiary);font-size:0.9rem" data-i18n="chi.subtitle">اختبار الاستقلالية بين المتغيرات الفئوية.</p>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label data-i18n="chi.rows">عدد الصفوف:</label>
+          <select id="chiRows" onchange="BasiraUI.buildChiTable()">
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label data-i18n="chi.cols">عدد الأعمدة:</label>
+          <select id="chiCols" onchange="BasiraUI.buildChiTable()">
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="chiTableContainer"></div>
+
+      <div class="buttons-row">
+        <button onclick="BasiraUI.runChiSquare()"><span data-i18n="chi.calculate">🎲 تنفيذ الاختبار</span></button>
+      </div>
+
+      <div id="chiResults"></div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
   <footer>
-    <p id="footerText">© 2026 — أداة المعالجة الإحصائية المتقدمة — الإصدار 3.0</p>
-    <p style="margin-top:8px;font-size:0.82rem">
-      <a href="https://github.com/" target="_blank" rel="noopener" id="githubLink">View on GitHub</a>
+    <p class="footer-brand">🧠 Basira Analytics — بصيرة</p>
+    <p class="footer-info">
+      All Rights Reserved © Engineer Ahmed Gohary<br>
+      Arab Republic of Egypt<br>
+      Phone: +201069689082
     </p>
   </footer>
 
-  <!-- ═══════════════════════════════════════════
-       SCRIPTS (Module Load Order)
-  ═══════════════════════════════════════════ -->
+  <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
   <script src="js/utils.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/statistics.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/export.js"></script>
+  <script src="js/descriptive.js"></script>
+  <script src="js/ttest.js"></script>
+  <script src="js/anova.js"></script>
+  <script src="js/correlation.js"></script>
+  <script src="js/chisquare.js"></script>
+  <script src="js/insights.js"></script>
+  <script src="js/csv-parser.js"></script>
   <script src="js/app.js"></script>
-
+  <script src="js/basira-ui.js"></script>
 </body>
 </html>
