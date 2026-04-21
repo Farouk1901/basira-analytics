@@ -36,6 +36,10 @@ const BasiraUI = (() => {
   // ============================================
   const _i18n = {
     ar: {
+      'tabs.varview': 'عرض المتغيرات',
+      'tabs.dataview': 'عرض البيانات',
+      'tabs.qanalysis': 'تحليل الأسئلة',
+      'tabs.axisanalysis': 'تحليل المحاور',
       'tabs.likert': 'ليكرت',
       'tabs.descriptive': 'وصفي',
       'tabs.ttest': 'اختبار T',
@@ -96,6 +100,10 @@ const BasiraUI = (() => {
       'r.significant': 'الدلالة الإحصائية', 'r.yes': '✅ دال إحصائياً', 'r.no': '❌ غير دال',
     },
     en: {
+      'tabs.varview': 'Variable View',
+      'tabs.dataview': 'Data View',
+      'tabs.qanalysis': 'Question Analysis',
+      'tabs.axisanalysis': 'Axis Analysis',
       'tabs.likert': 'Likert',
       'tabs.descriptive': 'Descriptive',
       'tabs.ttest': 'T-Test',

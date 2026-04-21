@@ -109,16 +109,64 @@
 
   <!-- ═══════════════════ TAB NAVIGATION ═══════════════════ -->
   <nav class="tab-nav" id="mainTabs">
-    <button class="tab-btn active" data-tab="likert"><span class="tab-icon">📋</span> <span data-i18n="tabs.likert">ليكرت</span></button>
-    <button class="tab-btn" data-tab="descriptive"><span class="tab-icon">📊</span> <span data-i18n="tabs.descriptive">وصفي</span></button>
+    <button class="tab-btn" data-tab="varview"><span class="tab-icon">📋</span> <span data-i18n="tabs.varview">عرض المتغيرات</span></button>
+    <button class="tab-btn" data-tab="dataview"><span class="tab-icon">📝</span> <span data-i18n="tabs.dataview">عرض البيانات</span></button>
+    <button class="tab-btn" data-tab="qanalysis"><span class="tab-icon">📊</span> <span data-i18n="tabs.qanalysis">تحليل الأسئلة</span></button>
+    <button class="tab-btn" data-tab="axisanalysis"><span class="tab-icon">🎯</span> <span data-i18n="tabs.axisanalysis">تحليل المحاور</span></button>
+    <button class="tab-btn active" data-tab="likert"><span class="tab-icon">⚖️</span> <span data-i18n="tabs.likert">ليكرت</span></button>
+    <button class="tab-btn" data-tab="descriptive"><span class="tab-icon">📈</span> <span data-i18n="tabs.descriptive">وصفي</span></button>
     <button class="tab-btn" data-tab="ttest"><span class="tab-icon">🔬</span> <span data-i18n="tabs.ttest">اختبار T</span></button>
-    <button class="tab-btn" data-tab="anova"><span class="tab-icon">📈</span> <span data-i18n="tabs.anova">ANOVA</span></button>
+    <button class="tab-btn" data-tab="anova"><span class="tab-icon">📉</span> <span data-i18n="tabs.anova">ANOVA</span></button>
     <button class="tab-btn" data-tab="correlation"><span class="tab-icon">🔗</span> <span data-i18n="tabs.correlation">ارتباط</span></button>
     <button class="tab-btn" data-tab="chisquare"><span class="tab-icon">🎲</span> <span data-i18n="tabs.chisquare">مربع كاي</span></button>
   </nav>
 
   <!-- ═══════════════════════════════════════════════════════════
-       TAB 1: LIKERT ANALYSIS (existing tool — preserved)
+       SPSS: VARIABLE VIEW
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-varview">
+    <section class="section">
+      <h3>📋 <span data-i18n="tabs.varview">عرض المتغيرات (Variable View)</span></h3>
+      <p style="color:var(--text-secondary);margin-bottom:16px" data-i18n="varview.subtitle">عرّف متغيرات الاستبيان — اسم المتغير، النوع، التسمية، قيم ليكرت، ومستوى القياس</p>
+      <div id="varViewContainer"></div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SPSS: DATA VIEW
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-dataview">
+    <section class="section">
+      <h3>📝 <span data-i18n="tabs.dataview">عرض البيانات (Data View)</span></h3>
+      <p style="color:var(--text-secondary);margin-bottom:16px" data-i18n="dataview.subtitle">أدخل استجابات أفراد العينة — كل صف يمثل مستجيب وكل عمود يمثل متغير</p>
+      <div id="dataViewContainer"></div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SPSS: QUESTION ANALYSIS
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-qanalysis">
+    <section class="section">
+      <h3>📊 <span data-i18n="tabs.qanalysis">تحليل الأسئلة</span></h3>
+      <p style="color:var(--text-secondary);margin-bottom:16px" data-i18n="qanalysis.subtitle">تحليل التكرارات والنسب المئوية والإحصائيات الوصفية لكل سؤال</p>
+      <div id="qAnalysisContainer"></div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SPSS: AXIS ANALYSIS
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-axisanalysis">
+    <section class="section">
+      <h3>🎯 <span data-i18n="tabs.axisanalysis">تحليل المحاور</span></h3>
+      <p style="color:var(--text-secondary);margin-bottom:16px" data-i18n="axisanalysis.subtitle">قم بتجميع الأسئلة في محاور موضوعية وتحليلها مع تعليق علمي شامل</p>
+      <div id="axisAnalysisContainer"></div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB: LIKERT ANALYSIS (existing tool — preserved)
   ═══════════════════════════════════════════════════════════ -->
   <div class="tab-panel active" id="panel-likert">
     <section class="section" id="settingsSection">
@@ -373,7 +421,30 @@
   <script src="js/chisquare.js"></script>
   <script src="js/insights.js"></script>
   <script src="js/csv-parser.js"></script>
+  <!-- SPSS-Style Modules -->
+  <script src="js/spss-data-model.js"></script>
+  <script src="js/variable-view.js"></script>
+  <script src="js/data-view.js"></script>
+  <script src="js/question-analysis.js"></script>
+  <script src="js/axis-analysis.js"></script>
   <script src="js/app.js"></script>
   <script src="js/basira-ui.js"></script>
+  <script>
+    // Initialize SPSS modules on tab switch
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        var tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var tab = btn.dataset.tab;
+            if (tab === 'varview') VariableView.render('varViewContainer');
+            if (tab === 'dataview') DataView_.render('dataViewContainer');
+            if (tab === 'qanalysis') QuestionAnalysis.render('qAnalysisContainer');
+            if (tab === 'axisanalysis') AxisAnalysis.render('axisAnalysisContainer');
+          });
+        });
+      }, 200);
+    });
+  </script>
 </body>
 </html>
